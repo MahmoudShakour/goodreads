@@ -1,0 +1,6 @@
+@goodreads_HostAddress = http://localhost:5075
+
+GET {{goodreads_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

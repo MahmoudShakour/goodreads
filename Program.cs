@@ -111,4 +111,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+DbSeeding.SeedData(app).Wait();
+
 app.Run();

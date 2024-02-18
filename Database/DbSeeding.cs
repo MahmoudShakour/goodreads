@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using goodreads.Database.Data;
 using goodreads.Database.Seeding;
 using Microsoft.AspNetCore.Identity;
 
@@ -23,6 +24,7 @@ namespace goodreads.Database
 
             // Seed data
             await UserSeeding.Seed(userManager);
+            await BookSeeding.Seed(applicationBuilder);
         }
     }
 }

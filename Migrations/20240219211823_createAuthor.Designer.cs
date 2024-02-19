@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using goodreads.Database;
 
@@ -11,9 +12,11 @@ using goodreads.Database;
 namespace goodreads.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240219211823_createAuthor")]
+    partial class createAuthor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,13 +54,13 @@ namespace goodreads.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "38359587-252f-49b6-8d46-0059983a6027",
+                            Id = "5abf491a-1fc1-4ad7-abc2-789c84becf68",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "1a8f0da3-a196-4843-bc0d-1619f4bc4389",
+                            Id = "e5ac6ea3-fb8a-4141-9280-864dc6f92617",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -250,17 +253,15 @@ namespace goodreads.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Summary")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Authors");
+                    b.ToTable("Author");
                 });
 
             modelBuilder.Entity("goodreads.Models.Book", b =>

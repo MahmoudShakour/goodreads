@@ -18,6 +18,7 @@ namespace goodreads.Database
         }
 
         public DbSet<Book> Books { get; set; }
+        public DbSet<Author> Authors { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -39,6 +40,7 @@ namespace goodreads.Database
             builder.Entity<IdentityRole>().HasData(roles);
 
             new BookConfiguration().Configure(builder.Entity<Book>());
+            new AuthorConfiguration().Configure(builder.Entity<Author>());
         }
 
     }

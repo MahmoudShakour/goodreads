@@ -24,6 +24,7 @@ namespace goodreads.Database
 
             // Seed data
             await UserSeeding.Seed(userManager);
+            await AuthorSeeding.Seed(applicationBuilder);
             await BookSeeding.Seed(applicationBuilder);
         }
     }

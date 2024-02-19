@@ -12,21 +12,29 @@ namespace goodreads.Repos
     public class BookRepo : IBookRepo
     {
         private readonly ApplicationDbContext _context;
+        private readonly int pageSize = 10;
 
         public BookRepo(ApplicationDbContext context)
         {
             _context = context;
         }
-        public async Task CreateBook(Book book)
+        public async Task<Book> CreateBook(Book book)
         {
             await _context.Books.AddAsync(book);
             await _context.SaveChangesAsync();
+            return book;
         }
 
         public async Task Delete(Book book)
         {
             _context.Books.Remove(book);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<Book>> GetAll(int pageNumber)
+        {
+            var booksToSkip=(pageNumber-1)*pageSize;
+            return await _context.Books.Skip(booksToSkip).Take(pageSize).ToListAsync();
         }
 
         public async Task<Book?> GetBookById(int id)
@@ -39,9 +47,9 @@ namespace goodreads.Repos
             return await _context.Books.SingleOrDefaultAsync(b => b.Isbn == isbn);
         }
 
-        public async Task<Book?> Update(int id, Book UpdatedBook)
+        public async Task<Book?> Update(Book UpdatedBook)
         {
-            var book = await GetBookById(id);
+            var book = await GetBookById(UpdatedBook.Id);
             if (book == null)
                 return null;
 

@@ -39,6 +39,17 @@ namespace goodreads.Repos
             return true;
         }
 
+        public async Task<bool> CreateAdmin(AppUser appUser, string password)
+        {
+            var createdUser = await userManager.CreateAsync(appUser, password);
+            if (!createdUser.Succeeded)
+            {
+                return false;
+            }
+            await userManager.AddToRoleAsync(appUser, "Admin");
+            return true;
+        }
+
         public async Task<string?> LoginUser(string username, string password)
         {
             var user = await userManager.Users.FirstOrDefaultAsync(u => u.UserName == username);
@@ -53,7 +64,11 @@ namespace goodreads.Repos
                 return null;
             }
 
-            var token = jWTHelper.GenerateToken(user.Email, user.Id, "User");
+            var roles = await userManager.GetRolesAsync(user);
+            if (roles == null || roles.Count() != 1)
+                return null;
+
+            var token = jWTHelper.GenerateToken(user.Email, user.Id, roles[0]);
             return token;
         }
     }

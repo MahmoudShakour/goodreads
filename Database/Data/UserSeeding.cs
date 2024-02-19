@@ -10,19 +10,19 @@ namespace goodreads.Database.Seeding
     {
         public static async Task Seed(UserManager<AppUser> userManager)
         {
-            string userPassword = "123mM!456789";
+            string userPassword = "NewAdminPassword@123";
             AppUser adminUser = new AppUser
             {
-                Email = "admin@gmail.com",
-                UserName = "MahmoudAbdulshakour",
-                PhoneNumber = "0121323112",
+                Email = "Admin123@admin.com",
+                UserName = "mahmoudshakourali",
+                EmailConfirmed = true,
+                PhoneNumber = "01062591395",
             };
 
-            IdentityResult user = await userManager.CreateAsync(adminUser, userPassword);
+            var admin = await userManager.CreateAsync(adminUser, userPassword);
 
-            if (user.Succeeded)
+            if (admin.Succeeded)
                 await userManager.AddToRoleAsync(adminUser, "Admin");
         }
-
     }
 }

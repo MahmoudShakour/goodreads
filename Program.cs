@@ -4,6 +4,7 @@ using goodreads.Database;
 using goodreads.Helpers;
 using goodreads.Helpers.Contracts;
 using goodreads.Repos;
+using goodreads.Repos.Contracts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IAuthRepo, AuthRepo>();
 builder.Services.AddScoped<IJWTHelper, JWTHelper>();
+builder.Services.AddScoped<IBookRepo, BookRepo>();
 
 
 

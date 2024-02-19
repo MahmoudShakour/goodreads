@@ -8,7 +8,7 @@ namespace goodreads.Helpers.Contracts
     public interface IJWTHelper
     {
         string GenerateToken(string email, string userId, string roleName);
-        TokenInfo DecodeToken(string token);
+        TokenInfo DecodeToken(string? token);
 
     }
 }

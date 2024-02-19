@@ -6,8 +6,9 @@
 
 ## books
 
-- only admins can CRUD books.
-
+- only admins can create/delete/update books.
+- users can get all books or one book by id or isbn.
+- a book has the following: id,isbn,name,year,rating,genre,numberOfPages
 ## authors
 
 - only admins can CRUD authors.
@@ -16,6 +17,9 @@
 
 - users can create/get reviews.
 - only user who created the review can update/delete it.
+
+## rating
+- users can CRUD their rates on books.
 
 ## comments
 

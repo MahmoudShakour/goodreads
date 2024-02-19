@@ -12,16 +12,20 @@ namespace goodreads.Helpers
 {
     public class JWTHelper : IJWTHelper
     {
-       
-       private IConfiguration configuration;
+
+        private IConfiguration configuration;
         private SymmetricSecurityKey key;
         public JWTHelper(IConfiguration configuration)
         {
             this.configuration = configuration;
             key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:SigningKey"]));
         }
-        public TokenInfo DecodeToken(string token)
+        public TokenInfo DecodeToken(string? token)
         {
+            if (token == null)
+            {
+                return new TokenInfo();
+            }
             token = token.Replace("Bearer ", "");
             var handler = new JwtSecurityTokenHandler().ValidateToken(
                 token,
@@ -38,11 +42,11 @@ namespace goodreads.Helpers
                 out SecurityToken securityToken
             );
             string id = handler.Claims.First(claim => claim.Type == "UserId").Value;
-            Console.WriteLine("token:"+id);
+            Console.WriteLine("token:" + id);
             string role = handler.Claims
                 .First(claim => claim.Type == "RoleName")
                 .Value;
-            Console.WriteLine("token:"+role);
+            Console.WriteLine("token:" + role);
 
 
             return new TokenInfo { Id = id, Role = role };

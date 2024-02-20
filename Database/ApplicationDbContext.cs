@@ -24,21 +24,6 @@ namespace goodreads.Database
         {
             base.OnModelCreating(builder);
 
-
-
-            List<IdentityRole> roles = new List<IdentityRole>
-            {
-                new IdentityRole{
-                    Name="Admin",
-                    NormalizedName="ADMIN"
-                },
-                 new IdentityRole{
-                    Name="User",
-                    NormalizedName="USER"
-                },
-            };
-            builder.Entity<IdentityRole>().HasData(roles);
-
             new BookConfiguration().Configure(builder.Entity<Book>());
             new AuthorConfiguration().Configure(builder.Entity<Author>());
         }

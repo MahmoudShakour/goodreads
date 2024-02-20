@@ -12,12 +12,14 @@ namespace goodreads.Repos
     public class AuthorRepo : IAuthorRepo
     {
         private readonly ApplicationDbContext _context;
+        private readonly IBookRepo _bookRepo;
         private readonly int pageSize = 10;
 
 
-        public AuthorRepo(ApplicationDbContext context)
+        public AuthorRepo(ApplicationDbContext context, IBookRepo bookRepo)
         {
             _context = context;
+            _bookRepo = bookRepo;
         }
 
         public async Task<Author> Create(Author author)
@@ -37,6 +39,15 @@ namespace goodreads.Repos
         {
             int authorsToSkip = (pageNumber - 1) * pageSize;
             return await _context.Authors.Skip(authorsToSkip).Take(pageSize).ToListAsync();
+        }
+
+        public async Task<List<Book>?> GetBooks(int id)
+        {
+            var author = await GetById(id);
+            if (author == null)
+                return null;
+
+            return await _bookRepo.GetBooksByAuthor(id);
         }
 
         public async Task<Author?> GetById(int id)

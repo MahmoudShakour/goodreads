@@ -13,5 +13,7 @@ namespace goodreads.Repos.Contracts
         Task<Author?> GetById(int id);
         Task<List<Author>> GetAll(int pageNumber);
         Task<Author?> Update(Author author);
+
+        Task<List<Book>?> GetBooks(int id);
     }
 }

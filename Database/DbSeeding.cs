@@ -23,6 +23,7 @@ namespace goodreads.Database
             >();
 
             // Seed data
+            await UserRolesSeeding.SeedAspNetRolesEntity(roleManager);
             await UserSeeding.Seed(userManager);
             await AuthorSeeding.Seed(applicationBuilder);
             await BookSeeding.Seed(applicationBuilder);

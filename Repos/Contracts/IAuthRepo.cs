@@ -11,6 +11,7 @@ namespace goodreads.Repos
         Task<bool> IsDuplicate(string email, string username);
         Task<bool> CreateUser(AppUser appUser, string password);
         Task<string?> LoginUser(string username, string password);
+        Task<AppUser?> GetUserById(string id);
 
     }
 }

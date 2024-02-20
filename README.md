@@ -9,6 +9,7 @@
 - only admins can create/delete/update books.
 - users can get all books or one book by id or isbn.
 - a book has the following: id,isbn,name,year,rating,genre,numberOfPages
+
 ## authors
 
 - only admins can CRUD authors.
@@ -18,7 +19,22 @@
 - users can create/get reviews.
 - only user who created the review can update/delete it.
 
+```
+a review ,made by a user on a book, has the following attributes:
+
+content
+createdAt
+it would have the following API:
+
+/api/book/{bookId}/review [POST]    user create a review for a book
+/api/review/{bookId}/review [GET]     user get all reviews of a book
+/api/review/{id} [DELETE]           user delete his review
+/api/review/{id} [PUT]              user update his review
+/api/review/{id} [GET]              user get specific review
+```
+
 ## rating
+
 - users can CRUD their rates on books.
 
 ## comments

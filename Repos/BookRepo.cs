@@ -33,7 +33,7 @@ namespace goodreads.Repos
 
         public async Task<List<Book>> GetAll(int pageNumber)
         {
-            var booksToSkip=(pageNumber-1)*pageSize;
+            var booksToSkip = (pageNumber - 1) * pageSize;
             return await _context.Books.Skip(booksToSkip).Take(pageSize).ToListAsync();
         }
 
@@ -45,6 +45,11 @@ namespace goodreads.Repos
         public async Task<Book?> GetBookByIsbn(string isbn)
         {
             return await _context.Books.SingleOrDefaultAsync(b => b.Isbn == isbn);
+        }
+
+        public async Task<List<Book>?> GetBooksByAuthor(int id)
+        {
+            return await _context.Books.Where(b => b.AuthorId == id).ToListAsync();
         }
 
         public async Task<Book?> Update(Book UpdatedBook)

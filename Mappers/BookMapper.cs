@@ -20,6 +20,7 @@ namespace goodreads.Mappers
                 Rating = createBookDto.Rating,
                 Genre = createBookDto.Genre,
                 NumberOfPages = createBookDto.NumberOfPages,
+                AuthorId = createBookDto.AuthorId,
             };
         }
 
@@ -35,6 +36,22 @@ namespace goodreads.Mappers
                 Rating = updateBookDto.Rating,
                 Genre = updateBookDto.Genre,
                 NumberOfPages = updateBookDto.NumberOfPages,
+            };
+        }
+
+        public static BookDto ToBookDto(this Book book)
+        {
+            return new BookDto
+            {
+                Id = book.Id,
+                Isbn = book.Isbn,
+                Title = book.Title,
+                Description = book.Description,
+                Year = book.Year,
+                Rating = book.Rating,
+                Genre = book.Genre,
+                NumberOfPages = book.NumberOfPages,
+                AuthorId = book.AuthorId,
             };
         }
     }

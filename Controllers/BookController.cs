@@ -17,28 +17,31 @@ namespace goodreads.Controllers
     public class BookController : ControllerBase
     {
         private readonly IBookRepo _bookRepo;
+        private readonly IAuthorRepo _authorRepo;
         private readonly TokenInfo _tokenInfo;
 
-        public BookController(IBookRepo bookRepo, IHttpContextAccessor httpContextAccessor, IJWTHelper jWTHelper)
+        public BookController(IAuthorRepo authorRepo, IBookRepo bookRepo, IHttpContextAccessor httpContextAccessor, IJWTHelper jWTHelper)
         {
+            _authorRepo = authorRepo;
             _bookRepo = bookRepo;
             var token = httpContextAccessor?.HttpContext?.Request.Headers.Authorization;
             _tokenInfo = jWTHelper.DecodeToken(token);
         }
 
-        [HttpGet("/page/{page}")]
+        [HttpGet("page/{page}")]
         public async Task<IActionResult> GetAll([FromRoute] int page)
         {
             try
             {
                 var books = await _bookRepo.GetAll(page);
+                var booksDto = books.Select(b => b.ToBookDto());
                 return Ok(
                     new
                     {
                         success = true,
                         statusCode = 200,
                         message = "books returned successfully.",
-                        data = books
+                        data = booksDto
                     }
                 );
             }
@@ -82,7 +85,7 @@ namespace goodreads.Controllers
                         success = true,
                         statusCode = 200,
                         message = "book returned successfully.",
-                        data = book,
+                        data = book.ToBookDto(),
                     }
                 );
             }
@@ -132,6 +135,19 @@ namespace goodreads.Controllers
                             }
                         );
                 }
+                var author = await _authorRepo.GetById(createBookDto.AuthorId);
+                if (author == null)
+                {
+                    return
+                        NotFound(
+                            new
+                            {
+                                success = false,
+                                statusCode = 404,
+                                message = "author id is not found",
+                            }
+                        );
+                }
 
                 var book = await _bookRepo.CreateBook(createBookDto.ToBook());
                 return
@@ -142,7 +158,7 @@ namespace goodreads.Controllers
                             success = true,
                             statusCode = 201,
                             message = "book is created successfully",
-                            data = book,
+                            data = book.ToBookDto(),
                         }
                     );
             }
@@ -154,9 +170,8 @@ namespace goodreads.Controllers
                         new
                         {
                             success = false,
-                            statusCode = 401,
-                            message = "Unauthorized"
-
+                            statusCode = 500,
+                            message = "internal server error"
                         }
                     );
             }
@@ -213,7 +228,7 @@ namespace goodreads.Controllers
                         success = true,
                         statusCode = 200,
                         message = "book is updated successfully",
-                        data = book,
+                        data = book.ToBookDto(),
                     }
                 );
             }
@@ -232,7 +247,6 @@ namespace goodreads.Controllers
                     );
             }
         }
-
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)

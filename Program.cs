@@ -14,10 +14,11 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddScoped<IAuthRepo, AuthRepo>();
 builder.Services.AddScoped<IJWTHelper, JWTHelper>();
+builder.Services.AddScoped<IAuthRepo, AuthRepo>();
 builder.Services.AddScoped<IBookRepo, BookRepo>();
 builder.Services.AddScoped<IAuthorRepo, AuthorRepo>();
+builder.Services.AddScoped<IReviewRepo, ReviewRepo>();
 
 
 

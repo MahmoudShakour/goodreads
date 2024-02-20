@@ -27,7 +27,7 @@ createdAt
 it would have the following API:
 
 /api/book/{bookId}/review [POST]    user create a review for a book
-/api/book/{bookId}/review [GET]     user get all reviews of a book
+/api/review/{bookId}/review [GET]     user get all reviews of a book
 /api/review/{id} [DELETE]           user delete his review
 /api/review/{id} [PUT]              user update his review
 /api/review/{id} [GET]              user get specific review

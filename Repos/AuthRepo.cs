@@ -28,6 +28,11 @@ namespace goodreads.Repos
                     await userManager.FindByNameAsync(username) != null;
         }
 
+        public async Task<AppUser?> GetUserById(string id)
+        {
+            return await userManager.FindByIdAsync(id);
+        }
+
         public async Task<bool> CreateUser(AppUser appUser, string password)
         {
             var createdUser = await userManager.CreateAsync(appUser, password);

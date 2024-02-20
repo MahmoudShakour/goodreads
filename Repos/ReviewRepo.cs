@@ -45,6 +45,11 @@ namespace goodreads.Repos
             return await _context.Reviews.Where(r => r.AppUserId == userId).ToListAsync();
         }
 
+        public async Task<bool> IsDuplicate(string userId, int bookId)
+        {
+            return await _context.Reviews.AnyAsync(r => r.AppUserId == userId && r.BookId == bookId);
+        }
+
         public async Task<Review?> Update(Review updatedReview)
         {
             var review = await _context.Reviews.FindAsync(updatedReview.Id);

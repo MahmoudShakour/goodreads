@@ -8,11 +8,13 @@ namespace goodreads.Repos.Contracts
 {
     public interface IRatingRepo
     {
+        Task<Rating?> GetById(int ratingId);
         Task<Rating> Create(Rating rating);
         Task Delete(Rating rating);
         Task<Rating?> Update(Rating rating);
         Task<List<Rating>> UserRatings(string userId);
         Task<List<Rating>> BookRatings(int bookId);
+        Task<Boolean> Exists(int bookId,string userId);
 
     }
 }

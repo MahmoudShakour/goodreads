@@ -39,7 +39,7 @@ it would have the following API:
 
 ```
 /api/rating/book/{bookId}    [GET]      get all ratings of a book
-/api/user/{userId}/rating    [GET]      get all ratings of a user
+/api/rating/user/{userId}    [GET]      get all ratings of a user
 
 /api/rating/book/{bookId}    [POST]     create a rating for a book
 /api/rating/{ratingId}       [PUT]      user update his rating

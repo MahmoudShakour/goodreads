@@ -18,5 +18,6 @@ namespace goodreads.Models
         public int AuthorId { get; set; }
         public Author Author { get; set; }
         public List<Review> Reviews { get; set; }
+        public List<Rating> Ratings { get; set; }
     }
 }

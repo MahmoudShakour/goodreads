@@ -10,5 +10,6 @@ namespace goodreads.Database
     public class AppUser : IdentityUser
     {
         public List<Review> Reviews { get; set; }
+        public List<Rating> Ratings { get; set; }
     }
 }

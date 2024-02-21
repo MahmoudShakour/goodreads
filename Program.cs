@@ -19,6 +19,7 @@ builder.Services.AddScoped<IAuthRepo, AuthRepo>();
 builder.Services.AddScoped<IBookRepo, BookRepo>();
 builder.Services.AddScoped<IAuthorRepo, AuthorRepo>();
 builder.Services.AddScoped<IReviewRepo, ReviewRepo>();
+builder.Services.AddScoped<IRatingRepo, RatingRepo>();
 
 
 

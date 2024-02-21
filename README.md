@@ -37,6 +37,15 @@ it would have the following API:
 
 - users can CRUD their rates on books.
 
+```
+/api/rating/book/{bookId}    [GET]      get all ratings of a book
+/api/rating/user/{userId}    [GET]      get all ratings of a user
+
+/api/rating/book/{bookId}    [POST]     create a rating for a book
+/api/rating/{ratingId}       [PUT]      user update his rating
+/api/rating/{ratingId}       [DELETE]   user delete his rating
+```
+
 ## comments
 
 - all users can create/get comments.

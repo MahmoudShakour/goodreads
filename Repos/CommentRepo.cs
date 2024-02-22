@@ -15,7 +15,7 @@ namespace goodreads.Repos
 
         public CommentRepo(ApplicationDbContext context)
         {
-            _context=context;
+            _context = context;
         }
 
         public async Task<Comment> Create(Comment comment)
@@ -38,20 +38,26 @@ namespace goodreads.Repos
 
         public async Task<List<Comment>> ReviewComments(int reviewId)
         {
-            return await _context.Comments.Where(c=>c.ReviewId==reviewId).ToListAsync();
+            return await _context.Comments.Where(c => c.ReviewId == reviewId).ToListAsync();
         }
 
         public async Task<Comment?> Update(Comment updatedComment)
         {
-            var comment=await _context.Comments.FindAsync(updatedComment.Id);
+            var comment = await _context.Comments.FindAsync(updatedComment.Id);
 
-            if(comment==null)
+            if (comment == null)
                 return null;
-            
-            comment.Content=updatedComment.Content;
+
+            comment.Content = updatedComment.Content;
             await _context.SaveChangesAsync();
 
             return comment;
+        }
+
+        public async Task<List<Comment>> UserComments(string userId)
+        {
+            return await _context.Comments.Where(c => c.AppUserId == userId).ToListAsync();
+
         }
     }
 }

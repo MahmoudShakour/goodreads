@@ -35,6 +35,12 @@ namespace goodreads.Database.Configuration
             builder
                 .HasIndex(r => new { r.AppUserId, r.BookId })
                 .IsUnique(true);
+
+            builder
+                .HasMany(r=>r.Comments)
+                .WithOne()
+                .HasForeignKey(c=>c.ReviewId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

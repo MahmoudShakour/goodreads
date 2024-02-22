@@ -51,12 +51,24 @@ it would have the following API:
 - all users can create/get comments.
 - only user who created the comment can update/delete it.
 
+```
+comment has the following attributes:
+- id
+- userId
+- reviewId
+- content
+- createdAt
+
+api/comment/user/{userId}          [GET]     get comments of specific user
+api/comment/review/{reviewId}      [GET]     get comments of specific review
+api/comment/{commentId}            [GET]     get comment by comment id
+api/comment/review/{reviewId}      [POST]    create a comment to a review
+api/comment/{commentId}            [DELETE]  delete a comment by id
+api/comment                        [UPDATE]  update specific comment
+
+```
+
 ## likes
 
 - all users can create/get likes.
 - only user who created the like can delete it.
-
-## more to do
-
-- authors has quotes that can be liked by users.
-- users can follow each other.

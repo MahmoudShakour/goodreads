@@ -16,6 +16,12 @@ namespace goodreads.Database.Configuration
                 .WithOne()
                 .HasForeignKey(c=>c.AppUserId)
                 .OnDelete(DeleteBehavior.Restrict);
+            
+            builder
+                .HasMany(u=>u.Likes)
+                .WithOne()
+                .HasForeignKey(l=>l.AppUserId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

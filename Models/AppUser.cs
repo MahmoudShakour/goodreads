@@ -11,5 +11,6 @@ namespace goodreads.Database
     {
         public List<Review> Reviews { get; set; }
         public List<Rating> Ratings { get; set; }
+        public List<Comment> Comments { get; set; }
     }
 }

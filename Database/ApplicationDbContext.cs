@@ -21,16 +21,22 @@ namespace goodreads.Database
         public DbSet<Author> Authors { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Rating> Ratings { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+           
 
             new BookConfiguration().Configure(builder.Entity<Book>());
             new AuthorConfiguration().Configure(builder.Entity<Author>());
             new ReviewConfiguration().Configure(builder.Entity<Review>());
             new RatingConfiguration().Configure(builder.Entity<Rating>());
+            new CommentConfiguration().Configure(builder.Entity<Comment>());
+            new UserConfiguration().Configure(builder.Entity<AppUser>());
         }
+
+        
 
     }
 }

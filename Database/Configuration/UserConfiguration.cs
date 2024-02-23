@@ -11,6 +11,11 @@ namespace goodreads.Database.Configuration
     {
         public void Configure(EntityTypeBuilder<AppUser> builder)
         {
+            builder
+                .HasMany(u=>u.Comments)
+                .WithOne()
+                .HasForeignKey(c=>c.AppUserId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

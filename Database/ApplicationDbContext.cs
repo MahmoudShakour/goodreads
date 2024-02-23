@@ -22,6 +22,7 @@ namespace goodreads.Database
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<Like> Likes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -34,6 +35,7 @@ namespace goodreads.Database
             new RatingConfiguration().Configure(builder.Entity<Rating>());
             new CommentConfiguration().Configure(builder.Entity<Comment>());
             new UserConfiguration().Configure(builder.Entity<AppUser>());
+            new LikeConfiguration().Configure(builder.Entity<Like>());
         }
 
         

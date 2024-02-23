@@ -77,8 +77,8 @@ namespace goodreads.Controllers
                         new
                         {
                             success = false,
-                            statusCode = 401,
-                            message = "Unauthorized"
+                            statusCode = 500,
+                            message = "internal server error"
                         }
                     );
             }
@@ -122,8 +122,8 @@ namespace goodreads.Controllers
                         new
                         {
                             success = false,
-                            statusCode = 401,
-                            message = "Unauthorized"
+                            statusCode = 500,
+                            message = "internal server error"
                         }
                     );
             }
@@ -155,8 +155,8 @@ namespace goodreads.Controllers
                         new
                         {
                             success = false,
-                            statusCode = 401,
-                            message = "Unauthorized"
+                            statusCode = 500,
+                            message = "internal server error"
                         }
                     );
             }
@@ -315,7 +315,7 @@ namespace goodreads.Controllers
                             }
                         );
                 }
-                var booksDto=books.Select(b=>b.ToBookDto());
+                var booksDto = books.Select(b => b.ToBookDto());
                 return Ok(
                     new
                     {

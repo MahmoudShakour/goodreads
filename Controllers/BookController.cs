@@ -53,8 +53,8 @@ namespace goodreads.Controllers
                         new
                         {
                             success = false,
-                            statusCode = 401,
-                            message = "Unauthorized"
+                            statusCode = 500,
+                            message = "internal server error"
                         }
                     );
             }

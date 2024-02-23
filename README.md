@@ -72,3 +72,10 @@ api/comment                        [UPDATE]  update specific comment
 
 - all users can create/get likes.
 - only user who created the like can delete it.
+
+```
+/api/like/user/{userId}         [GET]     get likes of specific user
+/api/like/review/{reviewId}     [GET]     get likes of specific review
+/api/like/review/{reviewId}     [POST]    create a like to a specific review
+/api/like/review/{reviewId}     [DELETE]  delete a like from a specific review
+```

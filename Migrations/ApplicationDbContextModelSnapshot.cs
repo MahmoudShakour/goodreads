@@ -246,7 +246,7 @@ namespace goodreads.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Authors");
+                    b.ToTable("Authors", (string)null);
                 });
 
             modelBuilder.Entity("goodreads.Models.Book", b =>
@@ -296,7 +296,7 @@ namespace goodreads.Migrations
                     b.HasIndex("Isbn")
                         .IsUnique();
 
-                    b.ToTable("Books");
+                    b.ToTable("Books", (string)null);
                 });
 
             modelBuilder.Entity("goodreads.Models.Comment", b =>
@@ -328,7 +328,7 @@ namespace goodreads.Migrations
 
                     b.HasIndex("ReviewId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("goodreads.Models.Like", b =>
@@ -356,7 +356,7 @@ namespace goodreads.Migrations
                     b.HasIndex("AppUserId", "ReviewId")
                         .IsUnique();
 
-                    b.ToTable("Likes");
+                    b.ToTable("Likes", (string)null);
                 });
 
             modelBuilder.Entity("goodreads.Models.Rating", b =>
@@ -384,7 +384,7 @@ namespace goodreads.Migrations
                     b.HasIndex("AppUserId", "BookId")
                         .IsUnique();
 
-                    b.ToTable("Ratings");
+                    b.ToTable("Ratings", (string)null);
                 });
 
             modelBuilder.Entity("goodreads.Models.Review", b =>
@@ -417,7 +417,7 @@ namespace goodreads.Migrations
                     b.HasIndex("AppUserId", "BookId")
                         .IsUnique();
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Reviews", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

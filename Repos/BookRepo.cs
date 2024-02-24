@@ -34,22 +34,57 @@ namespace goodreads.Repos
         public async Task<List<Book>> GetAll(int pageNumber)
         {
             var booksToSkip = (pageNumber - 1) * pageSize;
-            return await _context.Books.Skip(booksToSkip).Take(pageSize).ToListAsync();
+            var books = await _context.Books.OrderBy(b => b.Id).Skip(booksToSkip).Take(pageSize).ToListAsync();
+
+            foreach (var book in books)
+            {
+                var bookRatings = await _context.Ratings.Where(r => r.BookId == book.Id).ToListAsync();
+                if (bookRatings.Count != 0)
+                    book.Rating = bookRatings.Average(r => r.RateValue);
+            }
+
+            return books;
         }
 
         public async Task<Book?> GetBookById(int id)
         {
-            return await _context.Books.FindAsync(id);
+            var book = await _context.Books.FindAsync(id);
+            if (book == null)
+                return null;
+
+            var rating = await _context.Ratings.Where(r => r.BookId == id).ToListAsync();
+
+            if (rating.Count != 0)
+                book.Rating = rating.Average(r => r.RateValue);
+
+            return book;
         }
 
         public async Task<Book?> GetBookByIsbn(string isbn)
         {
-            return await _context.Books.SingleOrDefaultAsync(b => b.Isbn == isbn);
+            var book = await _context.Books.FindAsync(isbn);
+            if (book == null)
+                return null;
+
+            var rating = await _context.Ratings.Where(r => r.BookId == book.Id).ToListAsync();
+            if (rating.Count != 0)
+                book.Rating = rating.Average(r => r.RateValue);
+
+            return book;
         }
 
         public async Task<List<Book>?> GetBooksByAuthor(int id)
         {
-            return await _context.Books.Where(b => b.AuthorId == id).ToListAsync();
+            var books = await _context.Books.Where(b => b.AuthorId == id).ToListAsync();
+
+            foreach (var book in books)
+            {
+                var bookRatings = await _context.Ratings.Where(r => r.BookId == book.Id).ToListAsync();
+                if (bookRatings.Count != 0)
+                    book.Rating = bookRatings.Average(r => r.RateValue);
+            }
+
+            return books;
         }
 
         public async Task<Book?> Update(Book UpdatedBook)

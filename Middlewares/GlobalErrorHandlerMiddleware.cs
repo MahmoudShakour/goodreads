@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace goodreads.Middlewares
@@ -23,8 +24,18 @@ namespace goodreads.Middlewares
             }
             catch (Exception e)
             {
+                System.Console.WriteLine(e.StackTrace);
                 System.Console.WriteLine(e.Message);
+                
                 httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                httpContext.Response.ContentType = "application/json";
+                var body = new
+                {
+                    success = false,
+                    statusCode = 500,
+                    message = "internal server error"
+                };
+                await httpContext.Response.WriteAsync(JsonSerializer.Serialize(body));
             }
         }
 

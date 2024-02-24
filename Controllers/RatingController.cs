@@ -34,360 +34,277 @@ namespace goodreads.Controllers
         [HttpGet("book/{bookId}")]
         public async Task<IActionResult> GetBookRatings([FromRoute] int bookId)
         {
-            try
+            var book = await _bookRepo.GetBookById(bookId);
+            if (book == null)
             {
-                var book = await _bookRepo.GetBookById(bookId);
-                if (book == null)
-                {
-                    return NotFound(
-                        new
-                        {
-                            success = false,
-                            status = 404,
-                            message = "book is not found",
-                        }
-                    );
-                }
-
-                var ratings = await _ratingRepo.BookRatings(book.Id);
-                return Ok(
+                return NotFound(
                     new
                     {
-                        success = true,
-                        status = 200,
-                        message = "ratings returned successfully",
-                        data = ratings,
+                        success = false,
+                        status = 404,
+                        message = "book is not found",
                     }
                 );
             }
-            catch (Exception e)
-            {
-                System.Console.WriteLine(e);
-                return
-                    StatusCode(500,
-                        new
-                        {
-                            success = false,
-                            statusCode = 500,
-                            message = "internal server error"
-                        }
-                    );
-            }
+
+            var ratings = await _ratingRepo.BookRatings(book.Id);
+            return Ok(
+                new
+                {
+                    success = true,
+                    status = 200,
+                    message = "ratings returned successfully",
+                    data = ratings,
+                }
+            );
         }
 
         [HttpGet("user/{userId}")]
         public async Task<IActionResult> GetUserRatings([FromRoute] string userId)
         {
-            try
+            var user = await _authRepo.GetUserById(userId);
+            if (user == null)
             {
-                var user = await _authRepo.GetUserById(userId);
-                if (user == null)
-                {
-                    return NotFound(
-                        new
-                        {
-                            success = false,
-                            status = 404,
-                            message = "user is not found",
-                        }
-                    );
-                }
-
-                var ratings = await _ratingRepo.UserRatings(userId);
-                return Ok(
+                return NotFound(
                     new
                     {
-                        success = true,
-                        status = 200,
-                        message = "ratings returned successfully",
-                        data = ratings,
+                        success = false,
+                        status = 404,
+                        message = "user is not found",
                     }
                 );
             }
-            catch (Exception e)
-            {
-                System.Console.WriteLine(e);
-                return
-                    StatusCode(500,
-                        new
-                        {
-                            success = false,
-                            statusCode = 500,
-                            message = "internal server error"
-                        }
-                    );
-            }
+
+            var ratings = await _ratingRepo.UserRatings(userId);
+            return Ok(
+                new
+                {
+                    success = true,
+                    status = 200,
+                    message = "ratings returned successfully",
+                    data = ratings,
+                }
+            );
         }
 
         [HttpPost("book/{bookId}")]
         public async Task<IActionResult> Create([FromRoute] int bookId, [FromBody] CreateRatingDto createRatingDto)
         {
-            try
+            if (_tokenInfo == null)
             {
-                if (_tokenInfo == null)
-                {
-                    return
-                        Unauthorized(
-                            new
-                            {
-                                success = false,
-                                statusCode = 401,
-                                message = "you need to log in"
-                            }
-                        );
-                }
-
-                var user = await _authRepo.GetUserById(_tokenInfo.Id);
-                if (user == null)
-                {
-                    return
-                       Unauthorized(
-                           new
-                           {
-                               success = false,
-                               statusCode = 401,
-                               message = "token is no longer valid"
-                           }
-                       );
-                }
-
-                var book = await _bookRepo.GetBookById(bookId);
-                if (book == null)
-                {
-                    return
-                        NotFound(
-                            new
-                            {
-                                success = false,
-                                statusCode = 404,
-                                message = "book is not found",
-                            }
-                        );
-                }
-                var exists = await _ratingRepo.Exists(book.Id, user.Id);
-                if (exists)
-                {
-                    return
-                        BadRequest(
-                            new
-                            {
-                                success = false,
-                                statusCode = 400,
-                                message = "rating already exists",
-                            }
-                        );
-                }
-
-                var rating = createRatingDto.ToRating(user.Id, bookId);
-                var createdRating = await _ratingRepo.Create(rating);
-
                 return
-                    StatusCode(
-                        201,
-                        new
-                        {
-                            success = true,
-                            statusCode = 201,
-                            message = "rating added successfully",
-                        }
-                    );
-
-            }
-            catch (Exception e)
-            {
-                System.Console.WriteLine(e);
-                return
-                    StatusCode(500,
+                    Unauthorized(
                         new
                         {
                             success = false,
-                            statusCode = 500,
-                            message = "internal server error"
+                            statusCode = 401,
+                            message = "you need to log in"
                         }
                     );
             }
+
+            var user = await _authRepo.GetUserById(_tokenInfo.Id);
+            if (user == null)
+            {
+                return
+                   Unauthorized(
+                       new
+                       {
+                           success = false,
+                           statusCode = 401,
+                           message = "token is no longer valid"
+                       }
+                   );
+            }
+
+            var book = await _bookRepo.GetBookById(bookId);
+            if (book == null)
+            {
+                return
+                    NotFound(
+                        new
+                        {
+                            success = false,
+                            statusCode = 404,
+                            message = "book is not found",
+                        }
+                    );
+            }
+            var exists = await _ratingRepo.Exists(book.Id, user.Id);
+            if (exists)
+            {
+                return
+                    BadRequest(
+                        new
+                        {
+                            success = false,
+                            statusCode = 400,
+                            message = "rating already exists",
+                        }
+                    );
+            }
+
+            var rating = createRatingDto.ToRating(user.Id, bookId);
+            var createdRating = await _ratingRepo.Create(rating);
+
+            return
+                StatusCode(
+                    201,
+                    new
+                    {
+                        success = true,
+                        statusCode = 201,
+                        message = "rating added successfully",
+                    }
+                );
         }
 
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] UpdateRatingDto updateRatingDto)
         {
-            try
+            if (_tokenInfo == null)
             {
-                if (_tokenInfo == null)
-                {
-                    return
-                        Unauthorized(
-                            new
-                            {
-                                success = false,
-                                statusCode = 401,
-                                message = "you need to log in"
-                            }
-                        );
-                }
+                return
+                    Unauthorized(
+                        new
+                        {
+                            success = false,
+                            statusCode = 401,
+                            message = "you need to log in"
+                        }
+                    );
+            }
 
-                var user = await _authRepo.GetUserById(_tokenInfo.Id);
-                if (user == null)
-                {
-                    return
-                       Unauthorized(
-                           new
-                           {
-                               success = false,
-                               statusCode = 401,
-                               message = "token is no longer valid"
-                           }
-                       );
-                }
+            var user = await _authRepo.GetUserById(_tokenInfo.Id);
+            if (user == null)
+            {
+                return
+                   Unauthorized(
+                       new
+                       {
+                           success = false,
+                           statusCode = 401,
+                           message = "token is no longer valid"
+                       }
+                   );
+            }
 
-                var rating = await _ratingRepo.GetById(updateRatingDto.Id);
-                if (rating == null)
-                {
-                    return
-                        NotFound(
-                            new
-                            {
-                                success = false,
-                                statusCode = 404,
-                                message = "rating is not found",
-                            }
-                        );
-                }
-
-                if (rating.AppUserId != user.Id)
-                {
-                    return
-                        StatusCode(
-                            403,
-                            new
-                            {
-                                success = false,
-                                statusCode = 403,
-                                message = "you don't have access to update the rating",
-                            }
-                        );
-                }
-
-                var ratingToUpdate = updateRatingDto.ToRating(user.Id);
-                var updatedRating = await _ratingRepo.Update(ratingToUpdate);
-
-                if (updatedRating == null)
-                {
-                    return
-                        NotFound(
-                            new
-                            {
-                                success = false,
-                                statusCode = 404,
-                                message = "rating is not found",
-                            }
-                        );
-                }
-
+            var rating = await _ratingRepo.GetById(updateRatingDto.Id);
+            if (rating == null)
+            {
                 return
                     NotFound(
                         new
                         {
-                            success = true,
-                            statusCode = 200,
-                            message = "rating updated successfully",
-                            data = updatedRating,
+                            success = false,
+                            statusCode = 404,
+                            message = "rating is not found",
                         }
                     );
-
             }
-            catch (Exception e)
+
+            if (rating.AppUserId != user.Id)
             {
-                System.Console.WriteLine(e);
                 return
-                    StatusCode(500,
+                    StatusCode(
+                        403,
                         new
                         {
                             success = false,
-                            statusCode = 500,
-                            message = "internal server error"
+                            statusCode = 403,
+                            message = "you don't have access to update the rating",
                         }
                     );
             }
+
+            var ratingToUpdate = updateRatingDto.ToRating(user.Id);
+            var updatedRating = await _ratingRepo.Update(ratingToUpdate);
+
+            if (updatedRating == null)
+            {
+                return
+                    NotFound(
+                        new
+                        {
+                            success = false,
+                            statusCode = 404,
+                            message = "rating is not found",
+                        }
+                    );
+            }
+
+            return
+                NotFound(
+                    new
+                    {
+                        success = true,
+                        statusCode = 200,
+                        message = "rating updated successfully",
+                        data = updatedRating,
+                    }
+                );
         }
 
         [HttpDelete("{ratingId}")]
         public async Task<IActionResult> Delete([FromRoute] int ratingId)
         {
-            try
+            if (_tokenInfo == null)
             {
-                if (_tokenInfo == null)
-                {
-                    return
-                        Unauthorized(
-                            new
-                            {
-                                success = false,
-                                statusCode = 401,
-                                message = "you need to log in"
-                            }
-                        );
-                }
-
-                var user = await _authRepo.GetUserById(_tokenInfo.Id);
-                if (user == null)
-                {
-                    return
-                       Unauthorized(
-                           new
-                           {
-                               success = false,
-                               statusCode = 401,
-                               message = "token is no longer valid"
-                           }
-                       );
-                }
-
-                var rating = await _ratingRepo.GetById(ratingId);
-                if (rating == null)
-                {
-                    return
-                        NotFound(
-                            new
-                            {
-                                success = false,
-                                statusCode = 404,
-                                message = "rating is not found",
-                            }
-                        );
-                }
-
-                if (rating.AppUserId != user.Id)
-                {
-                    return
-                        StatusCode(
-                            403,
-                            new
-                            {
-                                success = false,
-                                statusCode = 403,
-                                message = "you don't have access to delete the rating",
-                            }
-                        );
-                }
-
-                await _ratingRepo.Delete(rating);
-                return NoContent();
-
-            }
-            catch (Exception e)
-            {
-                System.Console.WriteLine(e);
                 return
-                    StatusCode(500,
+                    Unauthorized(
                         new
                         {
                             success = false,
-                            statusCode = 500,
-                            message = "internal server error"
+                            statusCode = 401,
+                            message = "you need to log in"
                         }
                     );
             }
+
+            var user = await _authRepo.GetUserById(_tokenInfo.Id);
+            if (user == null)
+            {
+                return
+                   Unauthorized(
+                       new
+                       {
+                           success = false,
+                           statusCode = 401,
+                           message = "token is no longer valid"
+                       }
+                   );
+            }
+
+            var rating = await _ratingRepo.GetById(ratingId);
+            if (rating == null)
+            {
+                return
+                    NotFound(
+                        new
+                        {
+                            success = false,
+                            statusCode = 404,
+                            message = "rating is not found",
+                        }
+                    );
+            }
+
+            if (rating.AppUserId != user.Id)
+            {
+                return
+                    StatusCode(
+                        403,
+                        new
+                        {
+                            success = false,
+                            statusCode = 403,
+                            message = "you don't have access to delete the rating",
+                        }
+                    );
+            }
+
+            await _ratingRepo.Delete(rating);
+            return NoContent();
         }
     }
 }

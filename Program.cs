@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using goodreads.Database;
 using goodreads.Helpers;
 using goodreads.Helpers.Contracts;
+using goodreads.Middlewares;
 using goodreads.Repos;
 using goodreads.Repos.Contracts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -114,6 +115,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<GlobalErrorHandlerMiddleware>();
 
 app.MapControllers();
 

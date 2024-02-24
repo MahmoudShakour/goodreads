@@ -17,7 +17,6 @@ namespace goodreads.Mappers
                 Title = createBookDto.Title,
                 Description = createBookDto.Description,
                 Year = createBookDto.Year,
-                Rating = createBookDto.Rating,
                 Genre = createBookDto.Genre,
                 NumberOfPages = createBookDto.NumberOfPages,
                 AuthorId = createBookDto.AuthorId,
@@ -33,7 +32,6 @@ namespace goodreads.Mappers
                 Title = updateBookDto.Title,
                 Description = updateBookDto.Description,
                 Year = updateBookDto.Year,
-                Rating = updateBookDto.Rating,
                 Genre = updateBookDto.Genre,
                 NumberOfPages = updateBookDto.NumberOfPages,
             };

@@ -27,37 +27,35 @@ namespace goodreads.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateAuthorDto createAuthorDto)
         {
-            try
+            if (_tokenInfo == null)
             {
-                if (_tokenInfo == null)
-                {
-                    return
-                        Unauthorized(
-                            new
-                            {
-                                success = false,
-                                statusCode = 401,
-                                message = "you need to log in"
-                            }
-                        );
-                }
-
-                if (_tokenInfo.Role != "Admin")
-                {
-                    return
-                        StatusCode(403,
-                            new
-                            {
-                                success = false,
-                                statusCode = 403,
-                                message = "you don't have the access to create authors"
-                            }
-                        );
-                }
-
-                await _authorRepo.Create(createAuthorDto.ToAuthor());
                 return
-                    StatusCode(
+                    Unauthorized(
+                        new
+                        {
+                            success = false,
+                            statusCode = 401,
+                            message = "you need to log in"
+                        }
+                    );
+            }
+
+            if (_tokenInfo.Role != "Admin")
+            {
+                return
+                    StatusCode(403,
+                        new
+                        {
+                            success = false,
+                            statusCode = 403,
+                            message = "you don't have the access to create authors"
+                        }
+                    );
+            }
+
+            await _authorRepo.Create(createAuthorDto.ToAuthor());
+            return
+                StatusCode(
                     201,
                     new
                     {
@@ -65,279 +63,183 @@ namespace goodreads.Controllers
                         statusCode = 201,
                         message = "author created successfully."
                     }
-                    );
-
-            }
-            catch (Exception e)
-            {
-                System.Console.WriteLine(e);
-                return
-                    StatusCode(500,
-                        new
-                        {
-                            success = false,
-                            statusCode = 500,
-                            message = "internal server error"
-                        }
-                    );
-            }
+                );
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOne([FromRoute] int id)
         {
-            try
+            var author = await _authorRepo.GetById(id);
+            if (author == null)
             {
-                var author = await _authorRepo.GetById(id);
-                if (author == null)
-                {
-                    return
-                        NotFound(
-                            new
-                            {
-                                success = false,
-                                statusCode = 404,
-                                message = "author is not found"
-                            }
-                        );
-                }
-
                 return
-                    Ok(
-                        new
-                        {
-                            success = true,
-                            statusCode = 200,
-                            message = "author returned successfully.",
-                            data = author.ToAuthorDto(),
-                        }
-                    );
-            }
-            catch (Exception e)
-            {
-                System.Console.WriteLine(e);
-                return
-                    StatusCode(500,
+                    NotFound(
                         new
                         {
                             success = false,
-                            statusCode = 500,
-                            message = "internal server error"
+                            statusCode = 404,
+                            message = "author is not found"
                         }
                     );
             }
+
+            return
+                Ok(
+                    new
+                    {
+                        success = true,
+                        statusCode = 200,
+                        message = "author returned successfully.",
+                        data = author.ToAuthorDto(),
+                    }
+                );
         }
 
         [HttpGet("page/{pageNumber}")]
         public async Task<IActionResult> GetAll([FromRoute] int pageNumber)
         {
-            try
-            {
-                var authors = await _authorRepo.GetAll(pageNumber);
-                var authorsDto = authors.Select(a => a.ToAuthorDto());
-                return
-                    Ok(
-                        new
-                        {
-                            success = true,
-                            statusCode = 200,
-                            message = "authors returned successfully.",
-                            data = authorsDto,
-                        }
-                    );
-            }
-            catch (Exception e)
-            {
-                System.Console.WriteLine(e);
-                return
-                    StatusCode(500,
-                        new
-                        {
-                            success = false,
-                            statusCode = 500,
-                            message = "internal server error"
-                        }
-                    );
-            }
+            var authors = await _authorRepo.GetAll(pageNumber);
+            var authorsDto = authors.Select(a => a.ToAuthorDto());
+            return
+                Ok(
+                    new
+                    {
+                        success = true,
+                        statusCode = 200,
+                        message = "authors returned successfully.",
+                        data = authorsDto,
+                    }
+                );
         }
 
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] UpdateAuthorDto updateAuthorDto)
         {
-            try
+            if (_tokenInfo == null)
             {
-                if (_tokenInfo == null)
-                {
-                    return
-                        Unauthorized(
-                            new
-                            {
-                                success = false,
-                                statusCode = 401,
-                                message = "you need to log in"
-                            }
-                        );
-                }
-
-                if (_tokenInfo.Role != "Admin")
-                {
-                    return
-                        StatusCode(403,
-                            new
-                            {
-                                success = false,
-                                statusCode = 403,
-                                message = "you don't have the access to update authors"
-                            }
-                        );
-                }
-
-                var updatedAuthor = await _authorRepo.Update(updateAuthorDto.ToAuthor());
-                if (updatedAuthor == null)
-                {
-                    return
-                        NotFound(
-                            new
-                            {
-                                success = false,
-                                statusCode = 404,
-                                message = "author is not found."
-                            }
-                        );
-                }
-
                 return
-                    Ok(
+                    Unauthorized(
                         new
                         {
-                            success = true,
-                            statusCode = 200,
-                            message = "author is updated successfully.",
-                            data = updatedAuthor.ToAuthorDto(),
+                            success = false,
+                            statusCode = 401,
+                            message = "you need to log in"
                         }
                     );
             }
-            catch (Exception e)
+
+            if (_tokenInfo.Role != "Admin")
             {
-                System.Console.WriteLine(e);
-                return StatusCode(
-                    500,
+                return
+                    StatusCode(403,
+                        new
+                        {
+                            success = false,
+                            statusCode = 403,
+                            message = "you don't have the access to update authors"
+                        }
+                    );
+            }
+
+            var updatedAuthor = await _authorRepo.Update(updateAuthorDto.ToAuthor());
+            if (updatedAuthor == null)
+            {
+                return
+                    NotFound(
+                        new
+                        {
+                            success = false,
+                            statusCode = 404,
+                            message = "author is not found."
+                        }
+                    );
+            }
+
+            return
+                Ok(
                     new
                     {
-                        success = false,
-                        statusCode = 500,
-                        message = "internal server error",
+                        success = true,
+                        statusCode = 200,
+                        message = "author is updated successfully.",
+                        data = updatedAuthor.ToAuthorDto(),
                     }
                 );
-            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            try
+            if (_tokenInfo == null)
             {
-                if (_tokenInfo == null)
-                {
-                    return
-                        Unauthorized(
-                            new
-                            {
-                                success = false,
-                                statusCode = 401,
-                                message = "you need to log in"
-                            }
-                        );
-                }
-
-                if (_tokenInfo.Role != "Admin")
-                {
-                    return
-                        StatusCode(403,
-                            new
-                            {
-                                success = false,
-                                statusCode = 403,
-                                message = "you don't have the access to delete authors"
-                            }
-                        );
-                }
-
-                var author = await _authorRepo.GetById(id);
-                if (author == null)
-                {
-                    return
-                        NotFound(
-                            new
-                            {
-                                success = false,
-                                statusCode = 404,
-                                message = "author is not found."
-                            }
-                        );
-                }
-
-                await _authorRepo.Delete(author);
-                return NoContent();
+                return
+                    Unauthorized(
+                        new
+                        {
+                            success = false,
+                            statusCode = 401,
+                            message = "you need to log in"
+                        }
+                    );
             }
-            catch (Exception e)
+
+            if (_tokenInfo.Role != "Admin")
             {
-                System.Console.WriteLine(e);
-                return StatusCode(
-                    500,
-                    new
-                    {
-                        success = false,
-                        statusCode = 500,
-                        message = "internal server error",
-                    }
-                );
+                return
+                    StatusCode(403,
+                        new
+                        {
+                            success = false,
+                            statusCode = 403,
+                            message = "you don't have the access to delete authors"
+                        }
+                    );
             }
+
+            var author = await _authorRepo.GetById(id);
+            if (author == null)
+            {
+                return
+                    NotFound(
+                        new
+                        {
+                            success = false,
+                            statusCode = 404,
+                            message = "author is not found."
+                        }
+                    );
+            }
+
+            await _authorRepo.Delete(author);
+            return NoContent();
         }
 
         [HttpGet("{id}/books")]
         public async Task<IActionResult> GetBooks([FromRoute] int id)
         {
-            try
+            var books = await _authorRepo.GetBooks(id);
+            if (books == null)
             {
-
-                var books = await _authorRepo.GetBooks(id);
-                if (books == null)
+                return
+                    NotFound(
+                        new
+                        {
+                            success = false,
+                            statusCode = 404,
+                            message = "author is not found"
+                        }
+                    );
+            }
+            var booksDto = books.Select(b => b.ToBookDto());
+            return Ok(
+                new
                 {
-                    return
-                        NotFound(
-                            new
-                            {
-                                success = false,
-                                statusCode = 404,
-                                message = "author is not found"
-                            }
-                        );
+                    success = true,
+                    statusCode = 200,
+                    message = "author books returned successfully.",
+                    data = booksDto,
                 }
-                var booksDto = books.Select(b => b.ToBookDto());
-                return Ok(
-                    new
-                    {
-                        success = true,
-                        statusCode = 200,
-                        message = "author books returned successfully.",
-                        data = booksDto,
-                    }
-                );
-            }
-            catch (Exception e)
-            {
-                System.Console.WriteLine(e);
-                return StatusCode(
-                    500,
-                    new
-                    {
-                        success = false,
-                        statusCode = 500,
-                        message = "internal server error",
-                    }
-                );
-            }
+            );
         }
     }
 }

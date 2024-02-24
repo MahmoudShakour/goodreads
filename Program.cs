@@ -24,7 +24,6 @@ builder.Services.AddScoped<ICommentRepo, CommentRepo>();
 builder.Services.AddScoped<ILikeRepo, LikeRepo>();
 
 
-
 // add database context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {

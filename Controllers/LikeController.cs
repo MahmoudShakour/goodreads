@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using goodreads.Helpers;
 using goodreads.Helpers.Contracts;
@@ -9,6 +11,7 @@ using goodreads.Models;
 using goodreads.Repos;
 using goodreads.Repos.Contracts;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace goodreads.Controllers
 {
@@ -19,15 +22,14 @@ namespace goodreads.Controllers
         private readonly ILikeRepo _likeRepo;
         private readonly IReviewRepo _reviewRepo;
         private readonly IAuthRepo _authRepo;
-        private readonly TokenInfo _tokenInfo;
+        private readonly TokenInfo? _tokenInfo;
 
-        public LikeController(IReviewRepo reviewRepo, ILikeRepo likeRepo, IAuthRepo authRepo, IHttpContextAccessor httpContextAccessor, IJWTHelper jWTHelper)
-        {
+        public LikeController( IReviewRepo reviewRepo, ILikeRepo likeRepo, IAuthRepo authRepo,IJWTHelper jWTHelper)
+        {   
             _reviewRepo = reviewRepo;
             _likeRepo = likeRepo;
             _authRepo = authRepo;
-            var token = httpContextAccessor?.HttpContext?.Request.Headers.Authorization;
-            _tokenInfo = jWTHelper.DecodeToken(token);
+            _tokenInfo = jWTHelper.DecodeToken();
         }
 
 

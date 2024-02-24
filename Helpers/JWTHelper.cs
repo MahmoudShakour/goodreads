@@ -13,27 +13,28 @@ namespace goodreads.Helpers
     public class JWTHelper : IJWTHelper
     {
 
-        private IConfiguration configuration;
+        private IConfiguration _configuration;
         private SymmetricSecurityKey key;
-        public JWTHelper(IConfiguration configuration)
+        private string? token;
+        public JWTHelper(IConfiguration configuration,IHttpContextAccessor httpContextAccessor)
         {
-            this.configuration = configuration;
+            _configuration = configuration;
             key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:SigningKey"]));
+            token = httpContextAccessor?.HttpContext?.Request.Headers.Authorization;
         }
-        public TokenInfo DecodeToken(string? token)
+        public TokenInfo? DecodeToken()
         {
             if (token == null)
-            {
-                return new TokenInfo();
-            }
+                return null;
+
             token = token.Replace("Bearer ", "");
             var handler = new JwtSecurityTokenHandler().ValidateToken(
                 token,
                 new TokenValidationParameters()
                 {
                     IssuerSigningKey = key,
-                    ValidIssuer = configuration["JWT:Issuer"],
-                    ValidAudience = configuration["JWT:Audience"],
+                    ValidIssuer = _configuration["JWT:Issuer"],
+                    ValidAudience = _configuration["JWT:Audience"],
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,
@@ -42,12 +43,9 @@ namespace goodreads.Helpers
                 out SecurityToken securityToken
             );
             string id = handler.Claims.First(claim => claim.Type == "UserId").Value;
-            Console.WriteLine("token:" + id);
             string role = handler.Claims
                 .First(claim => claim.Type == "RoleName")
                 .Value;
-            Console.WriteLine("token:" + role);
-
 
             return new TokenInfo { Id = id, Role = role };
         }
@@ -68,10 +66,10 @@ namespace goodreads.Helpers
 
             var description = new SecurityTokenDescriptor()
             {
-                Issuer = configuration["JWT:Issuer"],
+                Issuer = _configuration["JWT:Issuer"],
                 IssuedAt = DateTime.UtcNow,
                 Expires = DateTime.UtcNow.AddDays(30),
-                Audience = configuration["JWT:Audience"],
+                Audience = _configuration["JWT:Audience"],
                 SigningCredentials = signingCredentials,
                 Subject = new ClaimsIdentity(claims),
             };

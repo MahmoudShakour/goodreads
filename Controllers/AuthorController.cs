@@ -16,13 +16,12 @@ namespace goodreads.Controllers
     public class AuthorController : ControllerBase
     {
         private readonly IAuthorRepo _authorRepo;
-        private readonly TokenInfo _tokenInfo;
+        private readonly TokenInfo? _tokenInfo;
 
-        public AuthorController(IAuthorRepo authorRepo, IHttpContextAccessor httpContextAccessor, IJWTHelper jWTHelper)
+        public AuthorController(IAuthorRepo authorRepo, IJWTHelper jWTHelper)
         {
             _authorRepo = authorRepo;
-            var token = httpContextAccessor?.HttpContext?.Request.Headers.Authorization;
-            _tokenInfo = jWTHelper.DecodeToken(token);
+            _tokenInfo = jWTHelper.DecodeToken();
         }
 
         [HttpPost]

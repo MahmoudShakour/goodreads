@@ -9,6 +9,7 @@ using goodreads.Helpers.Contracts;
 using goodreads.Mappers;
 using goodreads.Repos;
 using goodreads.Repos.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace goodreads.Controllers
@@ -20,15 +21,14 @@ namespace goodreads.Controllers
         private readonly IRatingRepo _ratingRepo;
         private readonly IAuthRepo _authRepo;
         private readonly IBookRepo _bookRepo;
-        private readonly TokenInfo _tokenInfo;
+        private readonly TokenInfo? _tokenInfo;
 
-        public RatingController(IBookRepo bookRepo, IRatingRepo ratingRepo, IAuthRepo authRepo, IHttpContextAccessor httpContextAccessor, IJWTHelper jWTHelper)
+        public RatingController(IBookRepo bookRepo, IRatingRepo ratingRepo, IAuthRepo authRepo, IJWTHelper jWTHelper)
         {
             _bookRepo = bookRepo;
             _ratingRepo = ratingRepo;
             _authRepo = authRepo;
-            var token = httpContextAccessor?.HttpContext?.Request.Headers.Authorization;
-            _tokenInfo = jWTHelper.DecodeToken(token);
+            _tokenInfo = jWTHelper.DecodeToken();
         }
 
         [HttpGet("book/{bookId}")]

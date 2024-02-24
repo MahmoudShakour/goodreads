@@ -26,6 +26,9 @@ namespace goodreads.Repos
 
         public async Task Delete(Review review)
         {
+            await _context.Likes.Where(l=>l.ReviewId==review.Id).ExecuteDeleteAsync();
+            await _context.Comments.Where(c=>c.ReviewId==review.Id).ExecuteDeleteAsync();
+            await _context.Comments.Where(c=>c.ReviewId==review.Id).ExecuteDeleteAsync();
             _context.Reviews.Remove(review);
             await _context.SaveChangesAsync();
         }

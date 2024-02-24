@@ -18,14 +18,13 @@ namespace goodreads.Controllers
     {
         private readonly IBookRepo _bookRepo;
         private readonly IAuthorRepo _authorRepo;
-        private readonly TokenInfo _tokenInfo;
+        private readonly TokenInfo? _tokenInfo;
 
-        public BookController(IAuthorRepo authorRepo, IBookRepo bookRepo, IHttpContextAccessor httpContextAccessor, IJWTHelper jWTHelper)
+        public BookController(IAuthorRepo authorRepo, IBookRepo bookRepo, IJWTHelper jWTHelper)
         {
             _authorRepo = authorRepo;
             _bookRepo = bookRepo;
-            var token = httpContextAccessor?.HttpContext?.Request.Headers.Authorization;
-            _tokenInfo = jWTHelper.DecodeToken(token);
+            _tokenInfo = jWTHelper.DecodeToken();
         }
 
         [HttpGet("page/{page}")]

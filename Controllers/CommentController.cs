@@ -19,15 +19,14 @@ namespace goodreads.Controllers
         private readonly ICommentRepo _commentRepo;
         private readonly IAuthRepo _authRepo;
         private readonly IReviewRepo _reviewRepo;
-        private readonly TokenInfo _tokenInfo;
+        private readonly TokenInfo? _tokenInfo;
 
-        public CommentController(IReviewRepo reviewRepo, ICommentRepo commentRepo, IAuthRepo authRepo, IHttpContextAccessor httpContextAccessor, IJWTHelper jWTHelper)
+        public CommentController(IReviewRepo reviewRepo, ICommentRepo commentRepo, IAuthRepo authRepo, IJWTHelper jWTHelper)
         {
             _reviewRepo = reviewRepo;
             _commentRepo = commentRepo;
             _authRepo = authRepo;
-            var token = httpContextAccessor?.HttpContext?.Request.Headers.Authorization;
-            _tokenInfo = jWTHelper.DecodeToken(token);
+            _tokenInfo = jWTHelper.DecodeToken();
         }
 
         [HttpGet("user/{userId}")]

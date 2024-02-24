@@ -17,18 +17,18 @@ namespace goodreads.Controllers
     [Route("/api/review")]
     public class ReviewController : ControllerBase
     {
-        private readonly TokenInfo _tokenInfo;
+        private readonly TokenInfo? _tokenInfo;
         private readonly IReviewRepo _reviewRepo;
         private readonly IBookRepo _bookRepo;
         private readonly IAuthRepo _authRepo;
 
-        public ReviewController(IAuthRepo authRepo, IBookRepo bookRepo, IReviewRepo reviewRepo, IHttpContextAccessor httpContextAccessor, IJWTHelper jWTHelper)
+
+        public ReviewController(IAuthRepo authRepo, IBookRepo bookRepo, IReviewRepo reviewRepo, IJWTHelper jWTHelper)
         {
             _authRepo = authRepo;
             _bookRepo = bookRepo;
             _reviewRepo = reviewRepo;
-            var token = httpContextAccessor?.HttpContext?.Request.Headers.Authorization;
-            _tokenInfo = jWTHelper.DecodeToken(token);
+            _tokenInfo = jWTHelper.DecodeToken();
         }
 
         [HttpPost("book/{bookId}")]
@@ -36,7 +36,6 @@ namespace goodreads.Controllers
         {
             try
             {
-
                 if (_tokenInfo == null)
                 {
                     return

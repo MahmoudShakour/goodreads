@@ -114,6 +114,19 @@ namespace goodreads.Controllers
                     );
             }
 
+            var isDuplicate = await _bookRepo.GetBookByIsbn(createBookDto.Isbn);
+            if (isDuplicate != null)
+            {
+                return BadRequest(
+                    new
+                    {
+                        statusCode = 400,
+                        success = false,
+                        message = "book with the same isbn is already found",
+                    }
+                );
+            }
+
             var book = await _bookRepo.CreateBook(createBookDto.ToBook());
             return
                 StatusCode(
@@ -199,7 +212,7 @@ namespace goodreads.Controllers
                         }
                     );
             }
-            
+
             if (_tokenInfo.Role != "Admin")
             {
                 return

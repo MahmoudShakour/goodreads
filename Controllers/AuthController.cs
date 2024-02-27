@@ -35,8 +35,7 @@ namespace goodreads.Controllers
                 );
             }
 
-            var user = registerDto.ToUser();
-            var isDuplicate = await authRepo.IsDuplicate(user.Email, user.UserName);
+            var isDuplicate = await authRepo.IsDuplicate(registerDto.Email, registerDto.Username);
             if (isDuplicate)
             {
                 return BadRequest(
@@ -49,6 +48,7 @@ namespace goodreads.Controllers
                 );
             }
 
+            var user = registerDto.ToUser();
             var isCreated = await authRepo.CreateUser(user, registerDto.Password);
             if (isCreated)
             {

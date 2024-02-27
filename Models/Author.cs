@@ -12,6 +12,6 @@ namespace goodreads.Models
         public DateTime BornAt { get; set; }
         public DateTime? DiedAt { get; set; }
         public string Summary { get; set; }=string.Empty;
-        public List<Book> Books { get; set; }
+        public List<Book> Books { get; set; }=[];
     }
 }

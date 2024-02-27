@@ -62,7 +62,7 @@ namespace goodreads.Repos
 
         public async Task<Book?> GetBookByIsbn(string isbn)
         {
-            var book = await _context.Books.FindAsync(isbn);
+            var book = await _context.Books.FirstOrDefaultAsync(b=>b.Isbn==isbn);
             if (book == null)
                 return null;
 

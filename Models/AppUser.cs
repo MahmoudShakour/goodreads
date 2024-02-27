@@ -9,9 +9,9 @@ namespace goodreads.Database
 {
     public class AppUser : IdentityUser
     {
-        public List<Review> Reviews { get; set; }
-        public List<Rating> Ratings { get; set; }
-        public List<Comment> Comments { get; set; }
-        public List<Like> Likes { get; set; }
+        public List<Review> Reviews { get; set; }=[];
+        public List<Rating> Ratings { get; set; }=[];
+        public List<Comment> Comments { get; set; }=[];
+        public List<Like> Likes { get; set; }=[];
     }
 }

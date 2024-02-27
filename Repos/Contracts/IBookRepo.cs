@@ -9,6 +9,7 @@ namespace goodreads.Repos.Contracts
     public interface IBookRepo
     {
         Task<Book?> GetBookById(int id);
+        Task<Book?> GetBookByIsbn(string isbn);
         Task<List<Book>?> GetBooksByAuthor(int id);
         Task<List<Book>> GetAll(int page);
         Task<Book> CreateBook(Book book);

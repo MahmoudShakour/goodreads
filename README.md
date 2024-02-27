@@ -50,83 +50,43 @@
 </blockquote>
 <hr>
 
-## 📷 Features
+## Features
 
-<details>
-<summary>
-<h4 style="display:inline">
-<strong><em> User Authentication</em></strong></h4>
-</summary>
+#### User Authentication
 
-- You can use sign up and sign in.
+- user can sign up.
+- user can sign in.
 
-</details>
-
-<details>
-<summary>
-<h4 style="display:inline">
-<strong><em> Author</em></strong></h4>
-</summary>
+#### Author
 
 - only admin can create/edit/delete authors
 - user can get authors
 
-</details>
-
-<details>
-<summary>
-<h4 style="display:inline">
-<strong><em> Book</em></strong></h4>
-</summary>
+#### Book
 
 - only admin can create/edit/delete books
 - user can get books
 
-</details>
-
-<details>
-<summary>
-<h4 style="display:inline">
-<strong><em> Review</em></strong></h4>
-</summary>
+#### Review
 
 - users can write review to books.
 - only the user who wrote the review can edit or delete it.
 - other users can get reviews of particular book or particular user
-</details>
 
-<details>
-<summary>
-<h4 style="display:inline">
-<strong><em> Comment</em></strong></h4>
-</summary>
+#### Comment
 
 - users can write comments on the reviews.
 - only the user who wrote the comment can edit or delete it.
 - other users can get comments of particular review or particular user
 
-</details>
-
-<details>
-<summary>
-<h4 style="display:inline">
-<strong><em> Like</em></strong></h4>
-</summary>
+#### Like
 
 - users can like reviews.
 - only the user who make the like can delete it.
 - other users can get likes of particular review or particular user
 
-</details>
-
-<details>
-<summary>
-<h4 style="display:inline">
-<strong><em> Rating</em></strong></h4>
-</summary>
+#### Rating
 
 - users can rate books.
 - only the user who rate the book can edit or delete it.
 - other users can get rating of particular book or particular user
-
-</details>
